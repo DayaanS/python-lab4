@@ -15,14 +15,15 @@ items_dict = {
     'c': {'slots': 2, 'points': 20}
 }
 
-inv_slots_x = 3
-inv_slots_y = 3
-inv_slots = inv_slots_x * inv_slots_y
-# заражение - антидот обязателен
 # убираем антидот из списка чтобы не положить в рюкзак дубликат
 must_have_key = 'd'
 must_have = items_dict.pop(must_have_key)
+
+inv_slots_x = 3
+inv_slots_y = 3
+inv_slots = inv_slots_x * inv_slots_y
 max_slots = inv_slots - must_have['slots']
+
 start_points = 15
 chr_points = start_points + must_have['points']
 
@@ -54,7 +55,6 @@ def get_selected_items(items_dict, max_slots):
     table, slots, points = get_table(items_dict, max_slots)
     n = len(items_dict)
     res = table[n][max_slots]
-    # print(res)
     a = max_slots
     items_list = []
 
@@ -68,8 +68,7 @@ def get_selected_items(items_dict, max_slots):
             res -= points[i-1]
             a -= slots[i-1]
     
-    # returns all possible items that fit slots and points
-    # some items have the same points and value
+    # find keys, some items have same points and value:
     # [['k', 'f'], ['t'], ['k', 'f'], ['m', 's', 'c'], ['r']]
     selected_items = []
     for search in items_list:
@@ -79,15 +78,12 @@ def get_selected_items(items_dict, max_slots):
                 selected_item.append(key)
         selected_items.append(selected_item)
    
-    # retuns a random inventory variant 
+    # return a random fitting inventory variant 
     inventory = []
     for item in selected_items:
-        if len(item) > 1:
-            # exclude already selected items to not add duplicates
-            r = random.choice([i for i in item if i not in inventory])
-            inventory.append(r)
-        else:
-            inventory.append(item[0])
+        # exclude already selected items to not add duplicates
+        r = random.choice([i for i in item if i not in inventory])
+        inventory.append(r)
     return inventory
 
 
@@ -107,10 +103,11 @@ if __name__ == '__main__':
     
     slots = []
     slots += must_have_key * must_have['slots']
+    
     for i in inventory:
         slots += i * items_dict[i]['slots']
     rows = [slots[i:i + inv_slots_x] for i in range(0, len(slots), inv_slots_x)] 
 
-    for r in rows: print(' '.join(f'[{x}]' for x in r))
+    for r in rows: print(' '.join(f'[{k}]' for k in r))
     print('Total survival points: ', chr_points)
 
