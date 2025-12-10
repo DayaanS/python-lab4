@@ -19,9 +19,9 @@ items_dict = {
 must_have_key = 'd'
 must_have = items_dict.pop(must_have_key)
 
-inv_slots_x = 3
-inv_slots_y = 3
-inv_slots = inv_slots_x * inv_slots_y
+slots_x = 3
+slots_y = 3
+inv_slots = slots_x * slots_y
 max_slots = inv_slots - must_have['slots']
 
 start_points = 15
@@ -106,7 +106,7 @@ if __name__ == '__main__':
     
     for i in inventory:
         slots += i * items_dict[i]['slots']
-    rows = [slots[i:i + inv_slots_x] for i in range(0, len(slots), inv_slots_x)] 
+    rows = [slots[i:i + slots_x] for i in range(0, len(slots), slots_x)]
 
     for r in rows: print(' '.join(f'[{k}]' for k in r))
     print('Total survival points: ', chr_points)
