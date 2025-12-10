@@ -1,3 +1,5 @@
+import random
+
 items_dict = {
     'r': {'slots': 3, 'points': 25},
     'p': {'slots': 2, 'points': 15},
@@ -76,7 +78,7 @@ def get_selected_items(items_dict, max_slots):
             items_list.append({'slots': slots[i-1], 'points':points[i-1]})
             res -= points[i-1]
             a -= slots[i-1]
-    print(items_list)
+    # print(items_list)
 
     selected_items = []
     for search in items_list:
@@ -85,7 +87,20 @@ def get_selected_items(items_dict, max_slots):
             if value == search:
                 selected_item.append(key)
         selected_items.append(selected_item)
-    return selected_items
+
+    #[['k', 'f'], ['t'], ['k', 'f'], ['m', 's', 'c'], ['r']]
+    items_variant = []
+    for item in selected_items:
+        if len(item) > 1:
+            n = 0
+            while n == 0:
+                random_item = random.choice(item)
+                if random_item not in items_variant:
+                    items_variant.append(random_item)
+                    n += 1
+        else:
+            items_variant.append(item[0])
+    return items_variant
 
     # inv_inventory_variants = []
     # inv_inv = [] 
@@ -98,8 +113,10 @@ def get_selected_items(items_dict, max_slots):
     # print(inv_inv)
 
 
-get_selected_items(items_dict, max_slots)
-inv_variant = ['k', 't', 'f', 'm', 'r', 'd']
+items_variant = get_selected_items(items_dict, max_slots)
+print(items_variant)
+
+inv_variant = ['d','k', 't', 'f', 'm', 'r']
 
 def calc_chr_points(items_dict, chr_points):
     for item in items_dict:
@@ -109,6 +126,7 @@ def calc_chr_points(items_dict, chr_points):
             chr_points -= items_dict[item]['points']
     return chr_points
 
+'''
 print(calc_chr_points(items_dict, chr_points))
 # 'k': {'slots': 1, 'points': 15}
 # 't': {'slots': 1, 'points': 25}
@@ -117,9 +135,20 @@ print(calc_chr_points(items_dict, chr_points))
 # 'r': {'slots': 3, 'points': 25}
 # 'd': {'slots': 1, 'points': 10}
 
-inv = [[0 for _ in range(inv_slots_x)] for _ in range(inv_slots_y)]
+slots = []
+items_dict.update({'d': must_have})
+print(items_dict)
+for i in inv_variant:
+    slots += i * items_dict[i]['slots']
+print(slots)
 
-print(inv)
+rows = [slots[i:i + inv_slots_x] for i in range(0, len(slots), inv_slots_x)]
+# a = [1, 2, 3, 4, 5, 6, 7, 8]
+# n = 3  
+# res = [] 
+# for i in range(0, len(a), n):  # Slice list in steps of n
+#     res.append(a[i:i + n])
+for r in rows: print(' '.join(f'[{x}]' for x in r))
 
 
-#[['k', 'f'], ['t'], ['k', 'f'], ['m', 's', 'c'], ['r']]
+'''
