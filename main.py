@@ -20,10 +20,11 @@ inv_slots_y = 3
 inv_slots = inv_slots_x * inv_slots_y
 # заражение - антидот обязателен
 # убираем антидот из списка чтобы не положить в рюкзак дубликат
-must_have = items_dict.pop('d')
+must_have_key = 'd'
+must_have = items_dict.pop(must_have_key)
 max_slots = inv_slots - must_have['slots']
 start_points = 15
-chr_points = start_points # + must_have['points']
+chr_points = start_points + must_have['points']
 
 
 def get_slots_and_points(items_dict):
@@ -113,31 +114,35 @@ def get_selected_items(items_dict, max_slots):
     # print(inv_inv)
 
 
-items_variant = get_selected_items(items_dict, max_slots)
-print(items_variant)
+#items_variant = get_selected_items(items_dict, max_slots)
+#print(items_variant)
 
-inv_variant = ['d','k', 't', 'f', 'm', 'r']
+#inv_variant = ['d','k', 't', 'f', 'm', 'r']
 
 def calc_chr_points(items_dict, chr_points):
+    inv_variant = get_selected_items(items_dict, max_slots)
     for item in items_dict:
+        points = items_dict[item]['points']
         if item in inv_variant:
-            chr_points += items_dict[item]['points']
+            chr_points += points
         else:
-            chr_points -= items_dict[item]['points']
-    return chr_points
+            chr_points -= points
+    return chr_points, inv_variant
 
-'''
-print(calc_chr_points(items_dict, chr_points))
+chr_points, inv_variant = calc_chr_points(items_dict, chr_points)
+print(chr_points)
 # 'k': {'slots': 1, 'points': 15}
 # 't': {'slots': 1, 'points': 25}
 # 'f': {'slots': 1, 'points': 15}
 # 'm': {'slots': 2, 'points': 20}
 # 'r': {'slots': 3, 'points': 25}
 # 'd': {'slots': 1, 'points': 10}
+inv_variant.append(must_have_key)
+print(inv_variant)
 
 slots = []
-items_dict.update({'d': must_have})
-print(items_dict)
+items_dict.update({must_have_key: must_have})
+# print(items_dict)
 for i in inv_variant:
     slots += i * items_dict[i]['slots']
 print(slots)
@@ -150,5 +155,3 @@ rows = [slots[i:i + inv_slots_x] for i in range(0, len(slots), inv_slots_x)]
 #     res.append(a[i:i + n])
 for r in rows: print(' '.join(f'[{x}]' for x in r))
 
-
-'''
